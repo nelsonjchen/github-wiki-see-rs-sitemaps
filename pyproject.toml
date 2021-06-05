@@ -5,7 +5,7 @@ description = ""
 authors = ["Nelson Chen <crazysim@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "3.9"
+python = "3.9.*"
 google-cloud-bigquery = "^2.18.0"
 
 [tool.poetry.dev-dependencies]

@@ -313,8 +313,8 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [metadata]
 lock-version = "1.1"
-python-versions = "3.9"
-content-hash = "709017ab7e15828d03ccca5032350dec5c4f70e9667979d951a05e8efcb6e7de"
+python-versions = "3.9.*"
+content-hash = "25fdbed4c8afffa9290ce6f0a43b2030237cc55494ac348a7dfc0cf09ade0577"
 
 [metadata.files]
 cachetools = [
