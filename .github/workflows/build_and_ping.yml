@@ -1,0 +1,9 @@
+name: Build and Ping
+on: [push]
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: atymic/sitemap-ping-action@1.0.0
+        with:
+          sitemap-url: http://github-wiki-see.page/sitemap.xml
