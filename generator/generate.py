@@ -1,3 +1,5 @@
+from xml.dom import minidom
+
 # noinspection PyPackageRequirements
 from google.cloud import bigquery
 
@@ -43,8 +45,38 @@ WHERE
     query_job = client.query(payload_query)  # API request
     rows = query_job.result()  # Waits for query to finish
 
+    root = minidom.Document()
+
+    sitemap_urlset = root.createElement('urlset')
+    sitemap_urlset.setAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9')
+    sitemap_urlset.setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance')
+    sitemap_urlset.setAttribute('xsi:schemaLocation',
+                                'https://www.sitemaps.org/schemas/sitemap/0.9 '
+                                'https://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd/XMLSchema-instance')
+
+    root.appendChild(sitemap_urlset)
+
+    # Generate XML File from query
     for row in rows:
-        print(row.html_url)
+        urlChild = root.createElement('url')
+        sitemap_urlset.appendChild(urlChild)
+        locChild = root.createElement('loc')
+        urlChild.appendChild(locChild)
+        locTextChild = root.createTextNode(row.html_url.replace(
+            'https://github.com/', 'https://github-wiki-see.page/m/'
+        ))
+        locChild.appendChild(locTextChild)
+        lastmodChild = root.createElement('lastmod')
+        urlChild.appendChild(lastmodChild)
+        lastmodTextChild = root.createTextNode(row.created_at.isoformat())
+        lastmodChild.appendChild(lastmodTextChild)
+
+    xml_str = root.toprettyxml(indent="\t")
+
+    save_path_file = "../dist/generated_sitemap.xml"
+
+    with open(save_path_file, "w") as f:
+        f.write(xml_str)
 
 
 if __name__ == "__main__":
