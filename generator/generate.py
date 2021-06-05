@@ -1,4 +1,6 @@
 from xml.dom import minidom
+import pathlib
+import shutil
 
 # noinspection PyPackageRequirements
 from google.cloud import bigquery
@@ -79,5 +81,16 @@ WHERE
         f.write(xml_str)
 
 
+def copy_manual_sitemaps():
+    dist_dir = pathlib.Path('../dist')
+
+    base_file = pathlib.Path('../base_sitemap.xml')
+    shutil.copy(base_file, dist_dir)
+    index_file = pathlib.Path('../base/sitemap_index.xml')
+    shutil.copy(index_file, dist_dir)
+
+
 if __name__ == "__main__":
+    pathlib.Path('../dist').mkdir(exist_ok=True)
+    copy_manual_sitemaps()
     generate()
