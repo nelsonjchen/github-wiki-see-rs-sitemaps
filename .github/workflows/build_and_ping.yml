@@ -1,14 +1,14 @@
 name: Build and Ping
 on: [push]
 jobs:
-  ping:
+  build_and_ping:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@master
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          project_id: github-wiki-see
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
