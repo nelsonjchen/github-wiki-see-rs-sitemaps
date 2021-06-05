@@ -21,7 +21,9 @@ FROM (
       parsePayload(payload) AS html_urls,
       created_at
     FROM
-      `github-wiki-see.scratch.multi_page` )
+      `github-wiki-see.scratch.multi_page`
+    WHERE
+      type = 'GollumEvent')
   SELECT
     DISTINCT html_url,
     created_at,
