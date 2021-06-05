@@ -20,6 +20,7 @@ jobs:
         with:
           path: ~/.cache/pypoetry/virtualenvs
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+      - run: poetry install
       - uses: atymic/sitemap-ping-action@1.0.0
         with:
           sitemap-url: https://github-wiki-see.page/sitemap.xml
