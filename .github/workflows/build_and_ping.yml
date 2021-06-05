@@ -11,9 +11,11 @@ jobs:
           project_id: github-wiki-see
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
-
-      - name: Use gcloud CLI
-        run: gcloud info
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - uses: abatilo/actions-poetry@v2.0.0
       - uses: atymic/sitemap-ping-action@1.0.0
         with:
           sitemap-url: https://github-wiki-see.page/sitemap.xml
