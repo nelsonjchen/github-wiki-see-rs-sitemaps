@@ -6,4 +6,4 @@ jobs:
     steps:
       - uses: atymic/sitemap-ping-action@1.0.0
         with:
-          sitemap-url: http://github-wiki-see.page/sitemap.xml
+          sitemap-url: https://github-wiki-see.page/sitemap.xml
