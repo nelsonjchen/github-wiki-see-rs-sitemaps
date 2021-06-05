@@ -4,27 +4,36 @@ from google.cloud import bigquery
 
 def generate():
     table = 'github-wiki-see.scratch.multi_page'
-    payload_query = ('\n'
-                     ' #standardSQL\n'
-                     'CREATE TEMPORARY FUNCTION\n'
-                     '  parsePayload(payload STRING)\n'
-                     '  RETURNS ARRAY<STRING>\n'
-                     '  LANGUAGE js AS """ try { return JSON.parse(payload).pages.reduce((a,\n'
-                     '      s) => {a.push(s.html_url); return a},\n'
-                     '    []); } catch (e) { return []; } """;\n'
-                     'WITH\n'
-                     '  parsed_payloads AS (\n'
-                     '  SELECT\n'
-                     '    parsePayload(payload) AS html_urls\n'
-                     '  FROM\n'
-                     f'    `{table}` )\n'
-                     'SELECT\n'
-                     '  DISTINCT html_url\n'
-                     'FROM\n'
-                     '  parsed_payloads\n'
-                     'CROSS JOIN\n'
-                     '  UNNEST(parsed_payloads.html_urls) AS html_url\n'
-                     )
+    payload_query_template = '''
+#standardSQL
+CREATE TEMPORARY FUNCTION
+  parsePayload(payload STRING)
+  RETURNS ARRAY<STRING>
+  LANGUAGE js AS """ try { return JSON.parse(payload).pages.reduce((a,
+      s) => {a.push(s.html_url); return a},
+    []); } catch (e) { return []; } """;
+SELECT
+  *
+FROM (
+  WITH
+    parsed_payloads AS (
+    SELECT
+      parsePayload(payload) AS html_urls,
+      created_at
+    FROM
+      `github-wiki-see.scratch.multi_page` )
+  SELECT
+    DISTINCT html_url,
+    created_at,
+    ROW_NUMBER() OVER(PARTITION BY html_url ORDER BY created_at DESC) AS rn
+  FROM
+    parsed_payloads
+  CROSS JOIN
+    UNNEST(parsed_payloads.html_urls) AS html_url)
+WHERE
+  rn = 1
+'''
+    payload_query = payload_query_template.replace('github-wiki-see.scratch.multi_page', table)
 
     client = bigquery.Client()
 
