@@ -39,6 +39,10 @@ FROM (
     UNNEST(parsed_payloads.html_urls) AS html_url)
 WHERE
   rn = 1
+  AND html_url NOT LIKE "%/wiki/Home"
+  AND html_url NOT LIKE "%/wiki/_Sidebar"
+  AND html_url NOT LIKE "%/wiki/_Footer"
+  AND html_url NOT LIKE "%/wiki/_Header"
 '''
     payload_query = payload_query_template.replace('github-wiki-see.scratch.multi_page', bigquery_table)
 
