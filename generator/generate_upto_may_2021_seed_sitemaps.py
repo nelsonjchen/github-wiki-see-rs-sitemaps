@@ -24,7 +24,7 @@ def generate(bigquery_table=None):
 
     # Perform a query.
     query_job = client.query(payload_query)  # API request
-    pages = query_job.result(page_size=45000).pages  # Waits for query to finish
+    pages = query_job.result(page_size=20000).pages  # Waits for query to finish
 
     for count, page in enumerate(pages):
         root = minidom.Document()
@@ -57,11 +57,10 @@ def generate(bigquery_table=None):
 
         save_path_file = f"../seed_sitemaps/{bigquery_table}_{count}.xml.gz"
         # print(f"Saving to {save_path_file}")
-        print(f"""
-    <sitemap>
+        print(f"""<sitemap>
         <loc>https://github-wiki-see.page/seed_sitemaps/{bigquery_table}_{count}.xml.gz</loc>
-    </sitemap>                
-        """)
+    </sitemap>
+""")
 
         with gzip.open(save_path_file, "wb") as f:
             f.write(xml_str.encode('UTF-8'))
