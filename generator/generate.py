@@ -1,3 +1,5 @@
+import argparse
+from datetime import date, timedelta
 from xml.dom import minidom
 import pathlib
 import shutil
@@ -6,8 +8,7 @@ import shutil
 from google.cloud import bigquery
 
 
-def generate():
-    table = 'github-wiki-see.scratch.multi_page'
+def generate(bigquery_table=None):
     payload_query_template = '''
 #standardSQL
 CREATE TEMPORARY FUNCTION
@@ -39,7 +40,7 @@ FROM (
 WHERE
   rn = 1
 '''
-    payload_query = payload_query_template.replace('github-wiki-see.scratch.multi_page', table)
+    payload_query = payload_query_template.replace('github-wiki-see.scratch.multi_page', bigquery_table)
 
     client = bigquery.Client()
 
@@ -91,6 +92,20 @@ def copy_manual_sitemaps():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Generate some sitemaps.')
+    parser.add_argument('--realbq', dest='realbq', action='store_true')
+    parser.set_defaults(realbq=False)
+
+    args = parser.parse_args()
+
     pathlib.Path('../dist').mkdir(exist_ok=True)
     copy_manual_sitemaps()
-    generate()
+
+    if args.realbq:
+        yesterday = date.today() - timedelta(days=1)
+        target_bigquery_table = f'githubarchive.day.{yesterday.strftime("%Y%m%d")}'
+    else:
+        target_bigquery_table = 'github-wiki-see.scratch.multi_page'
+
+    print(f'Pulling from BQ table: {target_bigquery_table}')
+    generate(bigquery_table=target_bigquery_table)
