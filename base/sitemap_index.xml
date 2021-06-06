@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <sitemap>
-        <loc>https://raw.githubusercontent.com/nelsonjchen/github-wiki-see-rs-sitemaps/dist/base_sitemap.xml</loc>
+        <loc>https://nelsonjchen.github.io/github-wiki-see-rs-sitemaps/base_sitemap.xml</loc>
     </sitemap>
     <sitemap>
-        <loc>https://raw.githubusercontent.com/nelsonjchen/github-wiki-see-rs-sitemaps/dist/generated_sitemap.xml</loc>
+        <loc>https://nelsonjchen.github.io/github-wiki-see-rs-sitemaps/generated_sitemap.xml</loc>
     </sitemap>
 </sitemapindex>
