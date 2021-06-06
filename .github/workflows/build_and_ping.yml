@@ -21,8 +21,7 @@ jobs:
           path: ~/.cache/pypoetry/virtualenvs
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
       - run: poetry install
-      - run: poetry env info
-      - run: python generate.py
+      - run: poetry run python generate.py
         working-directory: ./generator
       - name: Deploy
         uses: s0/git-publish-subdir-action@develop
