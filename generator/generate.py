@@ -94,6 +94,9 @@ def copy_manual_sitemaps():
     index_file = pathlib.Path('../base/sitemap_index.xml')
     shutil.copy(index_file, dist_dir)
 
+    # Copy manual seed sitemaps
+    shutil.copytree(pathlib.Path('../seed_sitemaps'), dist_dir / 'seed_sitemaps', dirs_exist_ok=True)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate some sitemaps.')

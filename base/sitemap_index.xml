@@ -6,4 +6,10 @@
     <sitemap>
         <loc>https://github-wiki-see.page/generated_sitemap.xml</loc>
     </sitemap>
+    <sitemap>
+        <loc>https://github-wiki-see.page/seed_sitemaps/github-wiki-see.show.touched_wiki_pages_202105_0.xml</loc>
+    </sitemap>
+    <sitemap>
+        <loc>https://github-wiki-see.page/seed_sitemaps/github-wiki-see.show.touched_wiki_pages_202105_1.xml</loc>
+    </sitemap>
 </sitemapindex>
