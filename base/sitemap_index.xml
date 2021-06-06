@@ -3,7 +3,7 @@
     <sitemap>
         <loc>https://raw.githubusercontent.com/nelsonjchen/github-wiki-see-rs-sitemaps/dist/base_sitemap.xml</loc>
     </sitemap>
-    <sitemapo>
+    <sitemap>
         <loc>https://raw.githubusercontent.com/nelsonjchen/github-wiki-see-rs-sitemaps/dist/generated_sitemap.xml</loc>
-    </sitemapo>
+    </sitemap>
 </sitemapindex>
