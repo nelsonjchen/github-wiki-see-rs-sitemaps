@@ -37,7 +37,7 @@ def generate(bigquery_table=None):
     for count, page in enumerate(tqdm(pages, desc="pages", total=page_count)):
         for row in tqdm(page, desc=f"page {count} rows", total=page_size):
             message_object_bytes = json.dumps({
-                "url": row.html_url,
+                "html_url": row.html_url,
                 "created_at": row.created_at.isoformat(),
             }).encode('utf8')
 
