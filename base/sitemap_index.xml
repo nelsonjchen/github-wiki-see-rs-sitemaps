@@ -7,13 +7,6 @@
     <sitemap>
         <loc>https://github-wiki-see.page/generated_sitemap.xml</loc>
     </sitemap>
-    <!-- Test big one -->
-    <sitemap>
-        <loc>https://github-wiki-see.page/seed_sitemaps/github-wiki-see.show.checked_touched_wiki_pages_202105_0.xml</loc>
-    </sitemap>
-    <sitemap>
-        <loc>https://github-wiki-see.page/seed_sitemaps/github-wiki-see.show.checked_touched_wiki_pages_202105_1.xml</loc>
-    </sitemap>
     <!-- Big one-->
     <sitemap>
         <loc>https://github-wiki-see.page/seed_sitemaps/github-wiki-see.show.checked_touched_wiki_pages_upto_202106_0.xml.gz</loc>
