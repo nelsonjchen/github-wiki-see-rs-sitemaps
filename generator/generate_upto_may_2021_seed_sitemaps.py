@@ -24,7 +24,7 @@ def generate(bigquery_table=None):
 
     # Perform a query.
     query_job = client.query(payload_query)  # API request
-    pages = query_job.result(page_size=20000).pages  # Waits for query to finish
+    pages = query_job.result(page_size=50000).pages  # Waits for query to finish
 
     for count, page in enumerate(pages):
         root = minidom.Document()
