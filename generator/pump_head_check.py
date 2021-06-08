@@ -21,15 +21,16 @@ def generate(bigquery_table=None):
 
     # Perform a query.
     query_job = client.query(payload_query)  # API request
-    page_size = 2000
+    page_size = 1000
     result = query_job.result(page_size=page_size)
     pages = result.pages  # Waits for query to finish
     page_count = (result.total_rows // page_size) + 1
 
     publisher = pubsub.PublisherClient(
         batch_settings=pubsub.types.BatchSettings(
-            max_messages=2000,
-            max_latency=10
+            max_messages=1000,
+            # max_latency=100,
+            max_bytes=10000000
         )
     )
 
