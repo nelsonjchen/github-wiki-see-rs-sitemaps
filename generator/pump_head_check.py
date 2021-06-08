@@ -21,19 +21,21 @@ def generate(bigquery_table=None):
 
     # Perform a query.
     query_job = client.query(payload_query)  # API request
-    pages = query_job.result(page_size=1000).pages  # Waits for query to finish
+    page_size = 2000
+    result = query_job.result(page_size=page_size)
+    pages = result.pages  # Waits for query to finish
+    page_count = (result.total_rows // page_size) + 1
 
     publisher = pubsub.PublisherClient(
         batch_settings=pubsub.types.BatchSettings(
-            max_messages=1000,
+            max_messages=2000,
             max_latency=10
         )
     )
 
     future = None
-    for count, page in enumerate(tqdm(pages, desc="pages")):
-        print(f"Processing page {count}")
-        for row in tqdm(page, desc="rows"):
+    for count, page in enumerate(tqdm(pages, desc="pages", total=page_count)):
+        for row in tqdm(page, desc=f"page {count} rows", total=page_size):
             message_object_bytes = json.dumps({
                 "url": row.html_url,
                 "created_at": row.created_at.isoformat(),
@@ -41,9 +43,7 @@ def generate(bigquery_table=None):
 
             topic_path = publisher.topic_path("github-wiki-see", "head_checker_input")
             future = publisher.publish(topic_path, message_object_bytes)
-
         future.result()
-        print(f"Processed page {count}")
 
 
 if __name__ == "__main__":
