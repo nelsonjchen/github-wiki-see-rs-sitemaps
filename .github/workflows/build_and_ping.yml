@@ -30,6 +30,8 @@ jobs:
       - run: poetry install
       - run: poetry run python generate.py --real_week
         working-directory: ./generator
+        env:
+          PYTHONUNBUFFERED: 1
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
