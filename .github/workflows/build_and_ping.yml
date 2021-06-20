@@ -28,7 +28,7 @@ jobs:
           path: ~/.cache/pypoetry/virtualenvs
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
       - run: poetry install
-      - run: poetry run python generate.py --realbq
+      - run: poetry run python generate.py --real_week
         working-directory: ./generator
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
@@ -39,4 +39,4 @@ jobs:
           user_email: 'github-actions[bot]@users.noreply.github.com'
       - uses: atymic/sitemap-ping-action@1.0.0
         with:
-          sitemap-url: https://github-wiki-see.page/sitemap.xml
+          sitemap-url: https://github-wiki-see.page/generated_sitemap.xml
