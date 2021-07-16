@@ -19,6 +19,7 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
       - name: Set up Python
+        id: setup-python
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
@@ -26,7 +27,7 @@ jobs:
       - uses: actions/cache@v2
         with:
           path: ~/.cache/pypoetry/virtualenvs
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}-${{ steps.setup-python.outputs.python-version }}
       - run: poetry install
       - run: poetry run python generate.py --real_week
         working-directory: ./generator
