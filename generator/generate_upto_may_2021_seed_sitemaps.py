@@ -16,7 +16,7 @@ Manually edited file to generate seed sitemaps from past months
 
 def generate(bigquery_table=None):
     payload_query_template = '''
-    SELECT * FROM `github-wiki-see.scratch.multi_page`
+    SELECT * FROM `github-wiki-see.scratch.multi_page` ORDER BY html_url
 '''
     payload_query = payload_query_template.replace('github-wiki-see.scratch.multi_page', bigquery_table)
 
