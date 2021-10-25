@@ -58,8 +58,8 @@ def generate(bigquery_table=None):
         save_path_file = f"../seed_sitemaps/{bigquery_table}_{count}.xml.gz"
         # print(f"Saving to {save_path_file}")
         print(f"""<sitemap>
-        <loc>https://github-wiki-see.page/seed_sitemaps/{bigquery_table}_{count}.xml.gz</loc>
-    </sitemap>
+    <loc>https://github-wiki-see.page/seed_sitemaps/{bigquery_table}_{count}.xml.gz</loc>
+</sitemap>
 """)
 
         with gzip.open(save_path_file, "wb") as f:
