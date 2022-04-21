@@ -10,6 +10,7 @@ on:
 jobs:
   build_and_ping:
     runs-on: ubuntu-latest
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v2
       - name: Set up Cloud SDK
