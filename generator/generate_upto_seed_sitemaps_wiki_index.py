@@ -16,7 +16,7 @@ Manually edited file to generate seed sitemaps from past months
 
 def generate(bigquery_table=None):
     payload_query_template = '''
-    SELECT DISTINCT repo_url FROM `FILLIN` ORDER BY repo_url
+    SELECT DISTINCT wiki_url FROM `FILLIN` ORDER BY wiki_url
 '''
     payload_query = payload_query_template.replace('FILLIN', bigquery_table)
 
@@ -41,14 +41,14 @@ def generate(bigquery_table=None):
 
         # Generate XML File from query
         for row in page:
-            repo_url: str = row.repo_url
-            if repo_url.startswith('/'):
-                repo_url = f'https://github.com{repo_url}'
+            wiki_url: str = row.wiki_url
+            if wiki_url.startswith('/'):
+                wiki_url = f'https://github.com{wiki_url}'
             urlChild = root.createElement('url')
             sitemap_urlset.appendChild(urlChild)
             locChild = root.createElement('loc')
             urlChild.appendChild(locChild)
-            locTextChild = root.createTextNode(repo_url.replace(
+            locTextChild = root.createTextNode(wiki_url.replace(
                 'https://github.com/', 'https://github-wiki-see.page/m/'
             ) + "_index")
             locChild.appendChild(locTextChild)
