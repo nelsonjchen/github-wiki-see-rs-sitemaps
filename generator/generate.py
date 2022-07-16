@@ -99,20 +99,20 @@ def generate_last_week_from_gha(hours_back=2):
 
 def process_hour_back_archive_time(f_args):
     print(f"_Processing with possible cache {f_args=} ")
-    res = _process_hour_back_archive_time(f_args)
+    hour_back, archive_datetime = f_args
+    print(f'_Processing {hour_back + 1} hour(s) back')
+    res = _process_archive_time(archive_datetime)
+    print(f'_Processed {hour_back + 1} hour(s) back with {len(res)} entries')
     print(f"_Processed with possible cache {f_args=}")
     return res
 
 
 # Cache it for a week
 @cache.memoize(expire=60 * 60 * 24 * 7)
-def _process_hour_back_archive_time(f_args):
-    hour_back, archive_datetime = f_args
+def _process_archive_time(archive_datetime):
     urls_to_last_mod_chunk = {}
-    # print(f"{hour_back + 1} hour(s) back")
     url = f"https://data.gharchive.org/{archive_datetime.year}-{archive_datetime.month:02d}-{archive_datetime.day:02d}-{archive_datetime.hour}.json.gz"
     try:
-        print(f'Processing {url}, {hour_back + 1} hour(s) back')
         with smart_open(url, 'r', encoding='utf-8') as f:
             for line in f:
                 event = json.loads(line)
@@ -132,7 +132,7 @@ def _process_hour_back_archive_time(f_args):
     except Exception as e:
         print(e, f'Error for {url}')
         return {}
-    print(f'Processed {url}, {hour_back + 1} hour(s) back , Entries in {len(urls_to_last_mod_chunk)=}')
+    print(f'Processed {url}, Entries in {len(urls_to_last_mod_chunk)=}')
     return urls_to_last_mod_chunk
 
 
