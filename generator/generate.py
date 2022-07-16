@@ -8,7 +8,7 @@ from datetime import timedelta
 from multiprocessing import Pool
 from xml.dom import minidom
 
-from diskcache import Cache, memoize_stampede
+from diskcache import Cache
 from smart_open import smart_open
 
 current_dir = pathlib.Path(__file__).parent
@@ -44,7 +44,7 @@ def generate_last_week_from_gha(hours_back=2):
 
     urls_to_last_mod = {}
 
-    pool = Pool(processes=32)
+    pool = Pool(processes=8)
     for url_date_dict in pool.imap_unordered(
             process_hour_back_archive_time,
             zip(
@@ -105,7 +105,7 @@ def process_hour_back_archive_time(f_args):
 
 
 # Cache it for a week
-@memoize_stampede(cache, expire=60 * 60 * 24 * 7)
+@cache.memoize(expire=60 * 60 * 24 * 7)
 def _process_hour_back_archive_time(f_args):
     hour_back, archive_datetime = f_args
     urls_to_last_mod_chunk = {}
