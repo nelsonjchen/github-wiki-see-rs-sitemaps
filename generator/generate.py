@@ -11,7 +11,7 @@ from multiprocessing import Pool
 
 def generate_last_week_from_gha(hours_back=2):
     """
-    Use cheaper S3 Archives from Github Archives
+    Use Archives from Github Archives
     :return:
     """
     print(f"Processing {hours_back=}")
@@ -24,7 +24,7 @@ def generate_last_week_from_gha(hours_back=2):
 
     urls_to_last_mod = {}
 
-    pool = Pool(processes=1)
+    pool = Pool(processes=32)
     for url_date_dict in pool.imap_unordered(
             process_hour_back_archive_time,
             zip(
@@ -39,8 +39,7 @@ def generate_last_week_from_gha(hours_back=2):
             else:
                 urls_to_last_mod[url] = page_date
 
-    print(f"Processed {hours_back=}")
-    print(f"Entries in {len(urls_to_last_mod)=}")
+    print(f"Processed {hours_back + 1}, Entries in {len(urls_to_last_mod)=}")
 
     root = minidom.Document()
 
@@ -77,13 +76,13 @@ def generate_last_week_from_gha(hours_back=2):
         f.write(xml_str)
 
 
-def process_hour_back_archive_time(args):
-    hour_back, archive_datetime = args
+def process_hour_back_archive_time(f_args):
+    hour_back, archive_datetime = f_args
     urls_to_last_mod = {}
     # print(f"{hour_back + 1} hour(s) back")
     url = f"https://data.gharchive.org/{archive_datetime.year}-{archive_datetime.month:02d}-{archive_datetime.day:02d}-{archive_datetime.hour}.json.gz"
     try:
-        print(f'Processing {url}')
+        print(f'Processing {url}, {hour_back + 1} hour(s) back')
         with smart_open(url, 'r', encoding='utf-8') as f:
             for line in f:
                 event = json.loads(line)
@@ -103,7 +102,7 @@ def process_hour_back_archive_time(args):
     except Exception as e:
         print(e, f'Error for {url}')
         return {}
-    print(f'Processed {url}, Entries in {len(urls_to_last_mod)=}')
+    print(f'Processed {url}, {hour_back + 1} hour(s) back , Entries in {len(urls_to_last_mod)=}')
     return urls_to_last_mod
 
 
@@ -121,8 +120,7 @@ def copy_manual_sitemaps():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generate some sitemaps.')
-    # parser.add_argument('--realbq', dest='realbq', action='store_true')
-    parser.add_argument('--real_week', dest='real_week', action='store_true')
+    parser.add_argument('--hours_back', dest='hours_back', type=int, default=2)
 
     parser.set_defaults(realbq=False)
 
@@ -140,10 +138,9 @@ if __name__ == "__main__":
     # print(f'Pulling from BQ table: {target_bigquery_table}')
     # generate(bigquery_table=target_bigquery_table)
 
-    if args.real_week:
-        hours_back = 24 * 7
-    else:
-        hours_back = 2
+    hours_back = 2
+    if args.hours_back:
+        hours_back = args.hours_back
 
-    # Use S3 Archives
+    # Use Archives
     generate_last_week_from_gha(hours_back)

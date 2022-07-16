@@ -30,7 +30,7 @@ jobs:
           path: ~/.cache/pypoetry/virtualenvs
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}-${{ steps.setup-python.outputs.python-version }}
       - run: poetry install
-      - run: poetry run python generate.py --real_week
+      - run: poetry run python generate.py --hours_back=168
         working-directory: ./generator
         env:
           PYTHONUNBUFFERED: 1
