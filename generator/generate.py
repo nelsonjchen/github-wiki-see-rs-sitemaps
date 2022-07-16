@@ -58,6 +58,7 @@ def generate_last_week_from_gha(hours_back=2):
                     urls_to_last_mod[url] = page_date
             else:
                 urls_to_last_mod[url] = page_date
+        print(f"Current entries so far in {len(urls_to_last_mod)=}")
 
     print(f"Processed {hours_back + 1}, Entries in {len(urls_to_last_mod)=}")
 
@@ -107,7 +108,7 @@ def process_hour_back_archive_time(f_args):
 @memoize_stampede(cache, expire=60 * 60 * 24 * 7)
 def _process_hour_back_archive_time(f_args):
     hour_back, archive_datetime = f_args
-    urls_to_last_mod = {}
+    urls_to_last_mod_chunk = {}
     # print(f"{hour_back + 1} hour(s) back")
     url = f"https://data.gharchive.org/{archive_datetime.year}-{archive_datetime.month:02d}-{archive_datetime.day:02d}-{archive_datetime.hour}.json.gz"
     try:
@@ -123,16 +124,16 @@ def _process_hour_back_archive_time(f_args):
                             page['html_url'].endswith('wiki/_Footer') or page['html_url'].endswith('wiki/_Header'):
                         continue
 
-                    if page['html_url'] in urls_to_last_mod:
-                        if urls_to_last_mod[page['html_url']] < event_created_at:
-                            urls_to_last_mod[page['html_url']] = event_created_at
+                    if page['html_url'] in urls_to_last_mod_chunk:
+                        if urls_to_last_mod_chunk[page['html_url']] < event_created_at:
+                            urls_to_last_mod_chunk[page['html_url']] = event_created_at
                     else:
-                        urls_to_last_mod[page['html_url']] = event_created_at
+                        urls_to_last_mod_chunk[page['html_url']] = event_created_at
     except Exception as e:
         print(e, f'Error for {url}')
         return {}
-    print(f'Processed {url}, {hour_back + 1} hour(s) back , Entries in {len(urls_to_last_mod)=}')
-    return urls_to_last_mod
+    print(f'Processed {url}, {hour_back + 1} hour(s) back , Entries in {len(urls_to_last_mod_chunk)=}')
+    return urls_to_last_mod_chunk
 
 
 def copy_manual_sitemaps():
