@@ -98,7 +98,7 @@ def generate_last_week_from_gha(hours_back=2):
 
 
 def process_hour_back_archive_time(f_args):
-    print(f"Processing with possible cache {f_args=} ")
+    print(f"_Processing with possible cache {f_args=} ")
     res = _process_hour_back_archive_time(f_args)
     print(f"_Processed with possible cache {f_args=}")
     return res
