@@ -25,6 +25,8 @@ jobs:
         with:
           path: generator/cache
           key: ccache-${{ github.run_id }}
+          restore-keys: |
+            ccache-
       - name: Set up Python
         id: setup-python
         uses: actions/setup-python@v2
