@@ -35,8 +35,8 @@ def generate_last_week_from_gha(hours_back=2):
                         continue
                     event_created_at = datetime.datetime.fromisoformat(event['created_at'][:-1])
                     for page in event['payload']['pages']:
-                        if page['html_url'].endswith('wiki/Home') or page['html_url'].endswith('wiki/_Sidebar') or page[
-                            'html_url'].endswith('wiki/_Footer') or page['html_url'].endswith('wiki/_Header'):
+                        if page['html_url'].endswith('wiki/Home') or page['html_url'].endswith('wiki/_Sidebar') or \
+                                page['html_url'].endswith('wiki/_Footer') or page['html_url'].endswith('wiki/_Header'):
                             continue
 
                         if page['html_url'] in urls_to_last_mod:
@@ -46,7 +46,7 @@ def generate_last_week_from_gha(hours_back=2):
                             urls_to_last_mod[page['html_url']] = event_created_at
         except Exception as e:
             print(e)
-        
+
         print(f'Entries in {len(urls_to_last_mod)=}')
 
     root = minidom.Document()
