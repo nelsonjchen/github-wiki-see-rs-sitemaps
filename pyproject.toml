@@ -9,6 +9,7 @@ python = "3.9.*"
 google-cloud-bigquery = "^2.18.0"
 tqdm = "^4.61.0"
 smart-open = "^5.1.0"
+diskcache = "^5.4.0"
 
 [tool.poetry.dev-dependencies]
 google-cloud-pubsub = "^2.5.0"

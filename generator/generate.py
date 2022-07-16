@@ -1,12 +1,26 @@
 import argparse
+import dataclasses
+import datetime
 import json
-from datetime import date, timedelta
-from xml.dom import minidom
 import pathlib
 import shutil
-import datetime
-from smart_open import smart_open
+from datetime import timedelta
 from multiprocessing import Pool
+from xml.dom import minidom
+
+from diskcache import Cache, memoize_stampede
+from smart_open import smart_open
+
+current_dir = pathlib.Path(__file__).parent
+cache = Cache(f'{current_dir}/cache')
+
+
+@dataclasses.dataclass
+class HourBackDate:
+    year: int
+    month: int
+    day: int
+    hour: int
 
 
 def generate_last_week_from_gha(hours_back=2):
@@ -19,7 +33,13 @@ def generate_last_week_from_gha(hours_back=2):
     def file_names_for_hours_back():
         now = datetime.datetime.utcnow() - timedelta(hours=1)
         while True:
-            yield now - timedelta(hours=1)
+            yield_date = now - timedelta(hours=1)
+            yield HourBackDate(
+                yield_date.year,
+                yield_date.month,
+                yield_date.day,
+                yield_date.hour
+            )
             now = now - timedelta(hours=1)
 
     urls_to_last_mod = {}
@@ -77,6 +97,15 @@ def generate_last_week_from_gha(hours_back=2):
 
 
 def process_hour_back_archive_time(f_args):
+    print(f"Processing with possible cache {f_args=} ")
+    res = _process_hour_back_archive_time(f_args)
+    print(f"_Processed with possible cache {f_args=}")
+    return res
+
+
+# Cache it for a week
+@memoize_stampede(cache, expire=60 * 60 * 24 * 7)
+def _process_hour_back_archive_time(f_args):
     hour_back, archive_datetime = f_args
     urls_to_last_mod = {}
     # print(f"{hour_back + 1} hour(s) back")
