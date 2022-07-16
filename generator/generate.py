@@ -6,6 +6,7 @@ import pathlib
 import shutil
 import datetime
 from smart_open import smart_open
+from multiprocessing import Pool
 
 
 def generate_last_week_from_gha(hours_back=2):
@@ -23,31 +24,23 @@ def generate_last_week_from_gha(hours_back=2):
 
     urls_to_last_mod = {}
 
-    for hour_back, archive_datetime in zip(range(hours_back), file_names_for_hours_back()):
-        print(f"{hour_back + 1} hour(s) back")
-        try:
-            url = f"https://data.gharchive.org/{archive_datetime.year}-{archive_datetime.month:02d}-{archive_datetime.day:02d}-{archive_datetime.hour}.json.gz"
-            with smart_open(url, 'r', encoding='utf-8') as f:
-                print(f'Opening {url}')
-                for line in f:
-                    event = json.loads(line)
-                    if event['type'] != 'GollumEvent':
-                        continue
-                    event_created_at = datetime.datetime.fromisoformat(event['created_at'][:-1])
-                    for page in event['payload']['pages']:
-                        if page['html_url'].endswith('wiki/Home') or page['html_url'].endswith('wiki/_Sidebar') or \
-                                page['html_url'].endswith('wiki/_Footer') or page['html_url'].endswith('wiki/_Header'):
-                            continue
+    pool = Pool(processes=1)
+    for url_date_dict in pool.imap_unordered(
+            process_hour_back_archive_time,
+            zip(
+                range(hours_back),
+                file_names_for_hours_back()
+            )
+    ):
+        for url, page_date in url_date_dict.items():
+            if url in urls_to_last_mod:
+                if urls_to_last_mod[url] < page_date:
+                    urls_to_last_mod[url] = page_date
+            else:
+                urls_to_last_mod[url] = page_date
 
-                        if page['html_url'] in urls_to_last_mod:
-                            if urls_to_last_mod[page['html_url']] < event_created_at:
-                                urls_to_last_mod[page['html_url']] = event_created_at
-                        else:
-                            urls_to_last_mod[page['html_url']] = event_created_at
-        except Exception as e:
-            print(e)
-
-        print(f'Entries in {len(urls_to_last_mod)=}')
+    print(f"Processed {hours_back=}")
+    print(f"Entries in {len(urls_to_last_mod)=}")
 
     root = minidom.Document()
 
@@ -82,6 +75,36 @@ def generate_last_week_from_gha(hours_back=2):
 
     with open(save_path_file, "w") as f:
         f.write(xml_str)
+
+
+def process_hour_back_archive_time(args):
+    hour_back, archive_datetime = args
+    urls_to_last_mod = {}
+    # print(f"{hour_back + 1} hour(s) back")
+    url = f"https://data.gharchive.org/{archive_datetime.year}-{archive_datetime.month:02d}-{archive_datetime.day:02d}-{archive_datetime.hour}.json.gz"
+    try:
+        print(f'Processing {url}')
+        with smart_open(url, 'r', encoding='utf-8') as f:
+            for line in f:
+                event = json.loads(line)
+                if event['type'] != 'GollumEvent':
+                    continue
+                event_created_at = datetime.datetime.fromisoformat(event['created_at'][:-1])
+                for page in event['payload']['pages']:
+                    if page['html_url'].endswith('wiki/Home') or page['html_url'].endswith('wiki/_Sidebar') or \
+                            page['html_url'].endswith('wiki/_Footer') or page['html_url'].endswith('wiki/_Header'):
+                        continue
+
+                    if page['html_url'] in urls_to_last_mod:
+                        if urls_to_last_mod[page['html_url']] < event_created_at:
+                            urls_to_last_mod[page['html_url']] = event_created_at
+                    else:
+                        urls_to_last_mod[page['html_url']] = event_created_at
+    except Exception as e:
+        print(e, f'Error for {url}')
+        return {}
+    print(f'Processed {url}, Entries in {len(urls_to_last_mod)=}')
+    return urls_to_last_mod
 
 
 def copy_manual_sitemaps():
