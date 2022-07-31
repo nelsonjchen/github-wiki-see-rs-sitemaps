@@ -107,8 +107,8 @@ def process_hour_back_archive_time(f_args):
     return res
 
 
-# Cache it for a week
-@cache.memoize(expire=60 * 60 * 24 * 7)
+# Cache it for a month
+@cache.memoize(expire=60 * 60 * 24 * 7 * 4)
 def _process_archive_time(archive_datetime):
     urls_to_last_mod_chunk = {}
     url = f"https://data.gharchive.org/{archive_datetime.year}-{archive_datetime.month:02d}-{archive_datetime.day:02d}-{archive_datetime.hour}.json.gz"
