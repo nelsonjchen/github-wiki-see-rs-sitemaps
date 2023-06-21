@@ -50,6 +50,6 @@ jobs:
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           force_orphan: true
-      - uses: atymic/sitemap-ping-action@1.0.0
+      - uses: atymic/sitemap-ping-action@1.1.0
         with:
           sitemap-url: https://github-wiki-see.page/generated_sitemap.xml
