@@ -32,13 +32,14 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-      - uses: abatilo/actions-poetry@v2.0.0
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
       - uses: actions/cache@v3
         with:
-          path: ~/.cache/pypoetry/virtualenvs
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}-${{ steps.setup-python.outputs.python-version }}
-      - run: poetry install
-      - run: poetry run python generate.py --hours_back=400
+          path: .venv
+          key: ${{ runner.os }}-uv-${{ hashFiles('uv.lock') }}-${{ steps.setup-python.outputs.python-version }}
+      - run: uv sync
+      - run: uv run python generate.py --hours_back=400
         working-directory: ./generator
         env:
           PYTHONUNBUFFERED: 1
