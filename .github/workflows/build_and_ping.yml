@@ -9,7 +9,8 @@ on:
 
 jobs:
   build_and_ping:
-    runs-on: ubuntu-latest
+    # Keep Python 3.9 on a supported runner; ubuntu-latest may move to a newer OS.
+    runs-on: ubuntu-24.04
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v2
