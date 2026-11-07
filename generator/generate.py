@@ -9,7 +9,7 @@ from multiprocessing import Pool
 from xml.dom import minidom
 
 from diskcache import Cache
-from smart_open import smart_open
+from smart_open import open as smart_open
 
 current_dir = pathlib.Path(__file__).parent
 cache = Cache(f'{current_dir}/cache')
