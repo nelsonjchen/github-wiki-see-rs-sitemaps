@@ -2,7 +2,7 @@
 name = "github-wiki-see-rs-sitemaps"
 version = "0.1.0"
 description = ""
-requires-python = ">=3.9"
+requires-python = ">=3.12"
 dependencies = [
     "google-cloud-bigquery>=2.18.0",
     "tqdm>=4.61.0",
