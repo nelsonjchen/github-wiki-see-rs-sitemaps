@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <sitemap>
+        <loc>https://github-wiki-see.page/base_sitemap.xml</loc>
+    </sitemap>
+    <!-- Continuously generated -->
+    <sitemap>
+        <loc>https://github-wiki-see.page/generated_sitemap.xml</loc>
+    </sitemap>
+    <!-- Big one-->
+    <sitemap>
+        <loc>
+            https://github-wiki-see.page/seed_sitemaps/github-wiki-see.show.distinct_wikis_for_wiki_index_sitemap_0.xml.gz
+        </loc>
+    </sitemap>
+
+    <sitemap>
+        <loc>
+            https://github-wiki-see.page/seed_sitemaps/github-wiki-see.show.distinct_wikis_for_wiki_index_sitemap_1.xml.gz
+        </loc>
+    </sitemap>
+
+    <sitemap>
+        <loc>
+            https://github-wiki-see.page/seed_sitemaps/github-wiki-see.show.distinct_wikis_for_wiki_index_sitemap_2.xml.gz
+        </loc>
+    </sitemap>
+
+    <sitemap>
+        <loc>
+            https://github-wiki-see.page/seed_sitemaps/github-wiki-see.show.distinct_wikis_for_wiki_index_sitemap_3.xml.gz
+        </loc>
+    </sitemap>
+
+    <sitemap>
+        <loc>
+            https://github-wiki-see.page/seed_sitemaps/github-wiki-see.show.distinct_wikis_for_wiki_index_sitemap_4.xml.gz
+        </loc>
+    </sitemap>
+
+    <sitemap>
+        <loc>
+            https://github-wiki-see.page/seed_sitemaps/github-wiki-see.show.distinct_wikis_for_wiki_index_sitemap_5.xml.gz
+        </loc>
+    </sitemap>
+
+    <sitemap>
+        <loc>
+            https://github-wiki-see.page/seed_sitemaps/github-wiki-see.show.distinct_wikis_for_wiki_index_sitemap_6.xml.gz
+        </loc>
+    </sitemap>
+
+    <sitemap>
+        <loc>
+            https://github-wiki-see.page/seed_sitemaps/github-wiki-see.show.distinct_wikis_for_wiki_index_sitemap_7.xml.gz
+        </loc>
+    </sitemap>
+
+    <sitemap>
+        <loc>
+            https://github-wiki-see.page/seed_sitemaps/github-wiki-see.show.distinct_wikis_for_wiki_index_sitemap_8.xml.gz
+        </loc>
+    </sitemap>
+
+    <sitemap>
+        <loc>
+            https://github-wiki-see.page/seed_sitemaps/github-wiki-see.show.distinct_wikis_for_wiki_index_sitemap_9.xml.gz
+        </loc>
+    </sitemap>
+
+</sitemapindex>
